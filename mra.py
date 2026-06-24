@@ -140,16 +140,15 @@ def login():
     print()
     password = ask("Password 🔒 ")
 
-    if username in data["users"]:
-
-        if data["users"][username]["password"] == hash_password(password):
-            print_ok("✅ Login successful ✅")
-            home(username)
-        else:
-            print_err("❌ Incorrect password ❌")
-
+    if username not in data["users"]:
+        print("❌User does not exist!❌")
+        return
+    if data["users"][username]["password"] == hash_password(password):
+        print_ok("✅ Login successful ✅")
+        home(username)
     else:
-        print_err("❌ Username not found ❌")
+        print_err("❌ Incorrect password ❌")
+
         
 # ══════════════════════════════════════════
 #   ADD MEDICATION
@@ -248,6 +247,7 @@ def clear_medications(username):
 
     else:
         print("❌ Invalid choice!")
+
 
 
 # ══════════════════════════════════════════

@@ -1,0 +1,20 @@
+{
+    "users": {
+        "Libby ": {
+            "password": "3feca40fdc50bc00a570776d0f784bb01c71d0ba4acbeeb64fa85091907345f5",
+            "medications": []
+        },
+        "Sads": {
+            "password": "f0a1fcef6b605c37e7f6a31b9b18d283e668fecffcb929210e23709bde946c80",
+            "medications": []
+        },
+        "Sadikshya": {
+            "password": "b8717592da574fa0d08ed39a7f7703726ed3e91bc4062de7dcfd418448bd575c",
+            "medications": []
+        },
+        "Libs": {
+            "password": "8a2d57c9ba7911cd9667221ee21dce250e54a736374a1c3aad1d7db8121988a5",
+            "medications": []
+        }
+    }
+}
