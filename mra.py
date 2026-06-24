@@ -192,3 +192,114 @@ def add_medication(username):
     })
     save_data(data)
     print("✅ Medication Added Successfully!")
+
+# ══════════════════════════════════════════
+#   VIEW MEDICATIONS
+# ══════════════════════════════════════════
+
+def view_medications(username):
+
+    meds = data["users"][username]["medications"]
+
+    if len(meds) == 0:
+        print("❌ No medications found!")
+        return
+    print("\n════════ YOUR MEDICATIONS ════════\n")
+
+    for i, med in enumerate(meds, start=1):
+
+        print(
+            f"{i}. 💊 {med['name']}\n"
+            f"   ⏰ Time : {med['time']}\n"
+            f"   📅 Date : {med['date']}\n"
+        )
+
+# ══════════════════════════════════════════
+#   REMOVE MEDICATION
+# ══════════════════════════════════════════
+
+def clear_medications(username):
+
+    meds = data["users"][username]["medications"]
+
+    if len(meds) == 0:
+        print("❌ No medications found!")
+        return
+
+    print("\nYour Medications:")
+
+    for i in range(len(meds)):
+        print(i + 1, "-", meds[i]["name"])
+
+    try:
+        choice = int(input("\n👉 Enter medication number to remove: "))
+    except ValueError:
+        print("❌ Enter a valid number!")
+        return
+    if 1 <= choice <= len(meds):
+
+        removed = meds[choice - 1]["name"]
+
+        meds.pop(choice - 1)
+
+        save_data(data)
+
+        print("✅", removed, "removed successfully!")
+
+    else:
+        print("❌ Invalid choice!")
+
+
+# ══════════════════════════════════════════
+#   REMINDERS
+# ══════════════════════════════════════════
+
+def start_reminders(username):
+
+    spacer()
+    title = "🔔 REMINDER 🔔 "
+
+    print("╔" + "═"*40 + "╗")
+    print("║" + title.center(40) + "║")
+    print("╚" + "═"*40 + "╝")
+
+    print("\nChecking every 5 seconds. Press Ctrl+C to stop.")
+
+    reminded = set()
+
+    try:
+        while True:
+
+            current_time = datetime.now().strftime("%H:%M")
+            current_date = datetime.now().strftime("%Y/%m/%d")
+
+            meds = data["users"][username]["medications"]
+
+            for med in meds:
+
+                reminder_id = (
+                    med["name"],
+                    med["date"],
+                    med["time"]
+                )
+
+                if (
+                    med["time"] == current_time
+                    and med["date"] == current_date
+                    and reminder_id not in reminded
+                ):
+
+                    print()
+                    print(SKY_BLUE + WHITE + BOLD +
+                          f" 🔔 TAKE {med['name']} NOW! 🔔 "
+                          + RESET)
+
+                    winsound.Beep(1000, 2000)
+
+                    reminded.add(reminder_id)
+
+            time.sleep(5)
+
+    except KeyboardInterrupt:
+        print("\n🔕 Reminders stopped.")
+    
