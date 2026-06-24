@@ -303,3 +303,80 @@ def start_reminders(username):
     except KeyboardInterrupt:
         print("\n🔕 Reminders stopped.")
     
+#══════════════════════════════════════════
+#   HOME MENU
+# ══════════════════════════════════════════
+
+def home(username):
+    while True:
+        print("WELCOME TO MEDICARE")
+        print()
+        print_row("1.  Add Medication")
+        print()
+        print_row("2.  View Medications")
+        print()
+        print_row("3.  Remove Medication")
+        print()
+        print_row("4.  Start Reminders")
+        print()
+        print_row("5.  Logout")
+        spacer()
+
+        choice = ask("👉 Enter choice")
+
+        if choice == "1":
+            add_medication(username)
+        elif choice == "2":
+            view_medications(username)
+        elif choice == "3":
+            clear_medications(username)
+        elif choice == "4":
+            start_reminders(username)
+        elif choice == "5":
+            print_ok("You are logged out from MEDICARE! Have a great day!")
+            break
+        else:
+            print_err("Please enter a number from 1 to 5.")
+
+
+# ══════════════════════════════════════════
+#   MAIN MENU
+# ══════════════════════════════════════════
+
+def main():
+    while True:
+        spacer()
+        print(r"""
+▄       ▄ ▄▄▄▄▄▄ ▄▄▄▄   ▄ ▄▄▄▄▄   ▄▄▄▄▄  ▄▄▄▄▄  ▄▄▄▄▄▄
+█▀▄   ▄▀█ █      █   ▀▄ █ █    ▀ █     █ █    █ █     
+█  ▀▄▀  ▄ █▄▄▄   █    █ █ █      █▄▄▄▄▄▀ █▄▄▄▄▀ █▄▄▄  
+▄   ▀   █ ▄      ▀    █ █ ▄      █     ▀ ▄  ▀▄  ▄     
+█       █ █▄▄▄▄▄ ▀▄▄▄▀  █ ▀▄▄▄▄▄ █     █ █    █ █▄▄▄▄▄
+     ===🩺💊 Your Health, Our Priority🩺💊====
+         ﮩ٨ــﮩ٨ـﮩﮩـﮩ٨ـ🫀ﮩ٨ﮩ٨ـﮩﮩ٨ـﮩﮩ٨ـ
+    """)
+        spacer()
+        print_row(" "*12+" 1.  Register "+" "*13)
+        spacer()
+        print_row(" "*13+"2.  Login "+" " *16) 
+        spacer()
+        print_row(" "*13+"3.  Exit"+" " *18)
+        spacer() 
+
+        choice = ask("👉 Enter choice")
+
+        if choice == "1":
+            register()
+        elif choice == "2":
+            login()
+        elif choice == "3":
+            spacer()
+            print_header("Goodbye! Stay healthy 😊.")
+            spacer()
+            break
+        else:
+            print_err("Please enter 1, 2, or 3.")
+
+
+# Start the program
+main()
