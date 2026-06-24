@@ -124,114 +124,71 @@ def register():
     print("\n✅ Registration Successful!")
     input("\nPress Enter to continue...")
 
-# ══════════════════════════════════════════
-#   VIEW MEDICATIONS
-# ══════════════════════════════════════════
-
-def view_medications(username):
-
-    meds = data["users"][username]["medications"]
-
-    if len(meds) == 0:
-        print("❌ No medications found!")
-        return
-    print("\n════════ YOUR MEDICATIONS ════════\n")
-
-    for i, med in enumerate(meds, start=1):
-
-        print(
-            f"{i}. 💊 {med['name']}\n"
-            f"   ⏰ Time : {med['time']}\n"
-            f"   📅 Date : {med['date']}\n"
-        )
-
-# ══════════════════════════════════════════
-#   REMOVE MEDICATION
+#══════════════════════════════════════════
+#   LOGIN
 # ══════════════════════════════════════════
 
-def clear_medications(username):
-
-    meds = data["users"][username]["medications"]
-
-    if len(meds) == 0:
-        print("❌ No medications found!")
-        return
-
-    print("\nYour Medications:")
-
-    for i in range(len(meds)):
-        print(i + 1, "-", meds[i]["name"])
-
-    try:
-        choice = int(input("\n👉 Enter medication number to remove: "))
-    except ValueError:
-        print("❌ Enter a valid number!")
-        return
-    if 1 <= choice <= len(meds):
-
-        removed = meds[choice - 1]["name"]
-
-        meds.pop(choice - 1)
-
-        save_data(data)
-
-        print("✅", removed, "removed successfully!")
-
-    else:
-        print("❌ Invalid choice!")
-
-
-# ══════════════════════════════════════════
-#   REMINDERS
-# ══════════════════════════════════════════
-
-def start_reminders(username):
-
+def login():
     spacer()
-    title = "🔔 REMINDER 🔔 "
+    title = "  LOGIN 🔐 "
 
     print("╔" + "═"*40 + "╗")
     print("║" + title.center(40) + "║")
     print("╚" + "═"*40 + "╝")
 
-    print("\nChecking every 5 seconds. Press Ctrl+C to stop.")
+    username = ask("Username 👤 ")
+    print()
+    password = ask("Password 🔒 ")
 
-    reminded = set()
+    if username in data["users"]:
 
-    try:
-        while True:
+        if data["users"][username]["password"] == hash_password(password):
+            print_ok("✅ Login successful ✅")
+            home(username)
+        else:
+            print_err("❌ Incorrect password ❌")
 
-            current_time = datetime.now().strftime("%H:%M")
-            current_date = datetime.now().strftime("%Y/%m/%d")
+    else:
+        print_err("❌ Username not found ❌")
+        
+# ══════════════════════════════════════════
+#   ADD MEDICATION
+# ══════════════════════════════════════════
 
-            meds = data["users"][username]["medications"]
+def add_medication(username):
+    print("\n")
+    print("╔" + "═"*40 + "╗")
+    print("║" + " ADD MEDICATION 💊".center(40) + "║")
+    print("╚" + "═"*40 + "╝\n")
 
-            for med in meds:
+    med_name = input("💊 Enter Medicine Name    : ").strip()
+    if not med_name:
+        print("❌ Medicine name cannot be empty!")
+        return
 
-                reminder_id = (
-                    med["name"],
-                    med["date"],
-                    med["time"]
-                )
+    # Keep asking until valid time and date are entered
+    while True:
+        med_time = input("⏰ Time (HH:MM)      : ").strip()
+        med_date = input("📅 Date (YYYY/MM/DD) : ").strip()
 
-                if (
-                    med["time"] == current_time
-                    and med["date"] == current_date
-                    and reminder_id not in reminded
-                ):
+        try:
+            med_datetime = datetime.strptime(f"{med_date} {med_time}", "%Y/%m/%d %H:%M")
+        except ValueError:
+            print("❌ Wrong format! Use HH:MM for time and YYYY/MM/DD for date. Try again!\n")
+            continue  # ← go back to top of loop
 
-                    print()
-                    print(SKY_BLUE + WHITE + BOLD +
-                          f" 🔔 TAKE {med['name']} NOW! 🔔 "
-                          + RESET)
+        current_datetime = datetime.now()
+        if med_datetime < current_datetime:
+            print("❌ Date and time cannot be in the past. Try again!\n")
+            continue  # ← go back to top of loop
 
-                    winsound.Beep(1000, 2000)
+        break  # ← everything is valid, exit loop
 
-                    reminded.add(reminder_id)
-
-            time.sleep(5)
-
-    except KeyboardInterrupt:
-        print("\n🔕 Reminders stopped.")
-    
-
+    # Save
+    data["users"][username]["medications"].append({
+        "name": med_name,
+        "time": med_time,
+        "date": med_date
+    })
+    save_data(data)
+    print("✅ Medication Added Successfully!")
