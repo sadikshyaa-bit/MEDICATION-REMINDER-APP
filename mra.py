@@ -123,3 +123,72 @@ def register():
 
     print("\n✅ Registration Successful!")
     input("\nPress Enter to continue...")
+
+#══════════════════════════════════════════
+#   LOGIN
+# ══════════════════════════════════════════
+
+def login():
+    spacer()
+    title = "  LOGIN 🔐 "
+
+    print("╔" + "═"*40 + "╗")
+    print("║" + title.center(40) + "║")
+    print("╚" + "═"*40 + "╝")
+
+    username = ask("Username 👤 ")
+    print()
+    password = ask("Password 🔒 ")
+
+    if username in data["users"]:
+
+        if data["users"][username]["password"] == hash_password(password):
+            print_ok("✅ Login successful ✅")
+            home(username)
+        else:
+            print_err("❌ Incorrect password ❌")
+
+    else:
+        print_err("❌ Username not found ❌")
+        
+# ══════════════════════════════════════════
+#   ADD MEDICATION
+# ══════════════════════════════════════════
+
+def add_medication(username):
+    print("\n")
+    print("╔" + "═"*40 + "╗")
+    print("║" + " ADD MEDICATION 💊".center(40) + "║")
+    print("╚" + "═"*40 + "╝\n")
+
+    med_name = input("💊 Enter Medicine Name    : ").strip()
+    if not med_name:
+        print("❌ Medicine name cannot be empty!")
+        return
+
+    # Keep asking until valid time and date are entered
+    while True:
+        med_time = input("⏰ Time (HH:MM)      : ").strip()
+        med_date = input("📅 Date (YYYY/MM/DD) : ").strip()
+
+        try:
+            med_datetime = datetime.strptime(f"{med_date} {med_time}", "%Y/%m/%d %H:%M")
+        except ValueError:
+            print("❌ Wrong format! Use HH:MM for time and YYYY/MM/DD for date. Try again!\n")
+            continue  # ← go back to top of loop
+
+        current_datetime = datetime.now()
+        if med_datetime < current_datetime:
+            print("❌ Date and time cannot be in the past. Try again!\n")
+            continue  # ← go back to top of loop
+
+        break  # ← everything is valid, exit loop
+
+    # Save
+    data["users"][username]["medications"].append({
+        "name": med_name,
+        "time": med_time,
+        "date": med_date
+    })
+    save_data(data)
+    print("✅ Medication Added Successfully!")
