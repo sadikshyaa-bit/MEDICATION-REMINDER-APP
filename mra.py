@@ -2,11 +2,13 @@ import json
 import time
 import winsound
 import hashlib
+import os
 from datetime import datetime
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
-
+def clear_screen():
+    os.system("cls")
 # ══════════════════════════════════════════
 #   COLORS  (plain ANSI codes, no library)
 # ══════════════════════════════════════════
@@ -123,6 +125,7 @@ def register():
 
     print("\n✅ Registration Successful!")
     input("\nPress Enter to continue...")
+    clear_screen()
 
 #══════════════════════════════════════════
 #   LOGIN
@@ -191,6 +194,7 @@ def add_medication(username):
     })
     save_data(data)
     print("✅ Medication Added Successfully!")
+    clear_screen()
 
 # ══════════════════════════════════════════
 #   VIEW MEDICATIONS
@@ -309,6 +313,8 @@ def start_reminders(username):
 
 def home(username):
     while True:
+        clear_screen()
+
         print("WELCOME TO MEDICARE")
         print()
         print_row("1.  Add Medication")
@@ -325,18 +331,28 @@ def home(username):
         choice = ask("👉 Enter choice")
 
         if choice == "1":
+            clear_screen()
             add_medication(username)
+            input("\nPress Enter...")
         elif choice == "2":
+            clear_screen()
             view_medications(username)
+            input("\nPress Enter...")
         elif choice == "3":
+            clear_screen()
             clear_medications(username)
+            input("\nPress Enter...")
         elif choice == "4":
+            clear_screen()
             start_reminders(username)
+            input("\nPress Enter...")
         elif choice == "5":
+            clear_screen()
             print_ok("You are logged out from MEDICARE! Have a great day!")
             break
         else:
             print_err("Please enter a number from 1 to 5.")
+            input("\nPress Enter...")
 
 
 # ══════════════════════════════════════════
@@ -345,6 +361,7 @@ def home(username):
 
 def main():
     while True:
+        clear_screen()
         spacer()
         print(r"""
 ▄       ▄ ▄▄▄▄▄▄ ▄▄▄▄   ▄ ▄▄▄▄▄   ▄▄▄▄▄  ▄▄▄▄▄  ▄▄▄▄▄▄
@@ -366,17 +383,20 @@ def main():
         choice = ask("👉 Enter choice")
 
         if choice == "1":
+            clear_screen()
             register()
         elif choice == "2":
+            clear_screen()
             login()
         elif choice == "3":
+            clear_screen()
             spacer()
             print_header("Goodbye! Stay healthy 😊.")
             spacer()
             break
         else:
             print_err("Please enter 1, 2, or 3.")
-
+            input("\nPress Enter...")
 
 # Start the program
 main()
