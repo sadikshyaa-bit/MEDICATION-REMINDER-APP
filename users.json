@@ -19,6 +19,31 @@
         "Sadikshyaa": {
             "password": "8ade339939578dc7b3d39a647083827a3c5613cebdce13cdfbc4bdeb3299235c",
             "medications": []
+        },
+        "Saddu": {
+            "password": "b8717592da574fa0d08ed39a7f7703726ed3e91bc4062de7dcfd418448bd575c",
+            "medications": [
+                {
+                    "name": "Paracetamol",
+                    "time": "8:17",
+                    "date": "2026/06/26"
+                },
+                {
+                    "name": "Sinex",
+                    "time": "8:19",
+                    "date": "2026/06/26"
+                }
+            ]
+        },
+        "Ram@": {
+            "password": "b618fa0de91d6462a04f935f30d3bce4e1ba1ff96de9e30cf728f13acb9ab3c7",
+            "medications": [
+                {
+                    "name": "Paracetamol",
+                    "time": "21:40",
+                    "date": "2026/06/26"
+                }
+            ]
         }
     }
 }

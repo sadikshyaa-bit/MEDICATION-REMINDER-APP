@@ -75,12 +75,9 @@ def save_data(data):
     file.close()
 
 data = load_data()
-
-
 # ══════════════════════════════════════════
 #   REGISTER
 # ══════════════════════════════════════════
-
 
 def register():
 
@@ -95,6 +92,25 @@ def register():
 
     username = input("👤 Create Username : ")
     password = input("🔒 Create Password : ")
+    # Username cannot be empty
+    if username == "":
+        print("\n❌ Username cannot be empty!")
+        return
+
+# Username must be at least 4 characters
+    if len(username) < 4:
+        print("\n❌ Username must be at least 4 characters!")
+        return
+
+# Username cannot be only numbers
+    if username.isdigit():
+        print("\n❌ Username cannot be only numbers!")
+        return
+
+# Username cannot contain spaces
+    if " " in username:
+        print("\n❌ Username cannot contain spaces!")
+        return
 
     if len(password) < 8:
         print("\n❌ Password must be at least 8 characters!")
@@ -125,7 +141,7 @@ def register():
 
     print("\n✅ Registration Successful!")
     input("\nPress Enter to continue...")
-    clear_screen()
+  
 
 #══════════════════════════════════════════
 #   LOGIN
@@ -164,37 +180,60 @@ def add_medication(username):
     print("╚" + "═"*40 + "╝\n")
 
     med_name = input("💊 Enter Medicine Name    : ").strip()
+
     if not med_name:
         print("❌ Medicine name cannot be empty!")
         return
 
-    # Keep asking until valid time and date are entered
     while True:
         med_time = input("⏰ Time (HH:MM)      : ").strip()
+
+        # Check time format
+        if ":" not in med_time:
+            print("❌ Wrong time format! Use HH:MM\n")
+            continue
+
+        hour, minute = med_time.split(":")
+
+        if not (hour.isdigit() and minute.isdigit()):
+            print("❌ Wrong time format! Use HH:MM\n")
+            continue
+
+        if len(hour) != 2 or len(minute) != 2:
+            print("❌ Wrong time format! Use HH:MM\n")
+            continue
+
         med_date = input("📅 Date (YYYY/MM/DD) : ").strip()
 
         try:
-            med_datetime = datetime.strptime(f"{med_date} {med_time}", "%Y/%m/%d %H:%M")
+            med_datetime = datetime.strptime(
+                f"{med_date} {med_time}",
+                "%Y/%m/%d %H:%M"
+            )
         except ValueError:
-            print("❌ Wrong format! Use HH:MM for time and YYYY/MM/DD for date. Try again!\n")
-            continue  # ← go back to top of loop
+            print("❌ Wrong date format! Use YYYY/MM/DD\n")
+            continue
 
         current_datetime = datetime.now()
+
         if med_datetime < current_datetime:
-            print("❌ Date and time cannot be in the past. Try again!\n")
-            continue  # ← go back to top of loop
+            print("❌ Date and time cannot be in the past!\n")
+            continue
 
-        break  # ← everything is valid, exit loop
+        break
 
-    # Save
     data["users"][username]["medications"].append({
         "name": med_name,
         "time": med_time,
         "date": med_date
     })
+
     save_data(data)
+
     print("✅ Medication Added Successfully!")
-    clear_screen()
+
+    input("\nPress Enter to continue...")
+  
 
 # ══════════════════════════════════════════
 #   VIEW MEDICATIONS
@@ -315,17 +354,20 @@ def home(username):
     while True:
         clear_screen()
 
-        print("WELCOME TO MEDICARE")
+        print("""
+     ---------- |W|E|L|C|O|M|E| ----------
+    """)
+
         print()
-        print_row("1.  Add Medication")
+        print_row("1. ➕ Add Medication 💊")
         print()
-        print_row("2.  View Medications")
+        print_row("2.  👀View Medications 💊")
         print()
-        print_row("3.  Remove Medication")
+        print_row("3.  ▶️ Start Reminders 🔔")
         print()
-        print_row("4.  Start Reminders")
+        print_row("4.  🚮Remove Medication 💊")
         print()
-        print_row("5.  Logout")
+        print_row("5.  🚪Logout")
         spacer()
 
         choice = ask("👉 Enter choice")
@@ -340,15 +382,15 @@ def home(username):
             input("\nPress Enter...")
         elif choice == "3":
             clear_screen()
-            clear_medications(username)
+            start_reminders(username)
             input("\nPress Enter...")
         elif choice == "4":
             clear_screen()
-            start_reminders(username)
+            clear_medications(username)
             input("\nPress Enter...")
         elif choice == "5":
             clear_screen()
-            print_ok("You are logged out from MEDICARE! Have a great day!")
+            print_ok("You are logged out from MEDICARE! Have a great day!😊")
             break
         else:
             print_err("Please enter a number from 1 to 5.")
@@ -361,7 +403,6 @@ def home(username):
 
 def main():
     while True:
-        clear_screen()
         spacer()
         print(r"""
 ▄       ▄ ▄▄▄▄▄▄ ▄▄▄▄   ▄ ▄▄▄▄▄   ▄▄▄▄▄  ▄▄▄▄▄  ▄▄▄▄▄▄
