@@ -98,9 +98,6 @@ def register():
         return
 
 # Username must be at least 4 characters
-    if len(username) < 4:
-        print("\n❌ Username must be at least 4 characters!")
-        return
 
 # Username cannot be only numbers
     if username.isdigit():
