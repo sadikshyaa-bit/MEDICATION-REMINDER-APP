@@ -97,8 +97,6 @@ def register():
         print("\n❌ Username cannot be empty!")
         return
 
-# Username must be at least 4 characters
-
 # Username cannot be only numbers
     if username.isdigit():
         print("\n❌ Username cannot be only numbers!")
